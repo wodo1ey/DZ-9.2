@@ -1,0 +1,62 @@
+# Разработать приложение «Календарь», которое выводит на экран календарь 
+# на указанный месяц заданного года. Основное окно программы должно содержать 
+# заголовок приложения, текстовое поле для ввода года, список для выбора месяца 
+# и кнопку «Просмотреть», при нажатии на которую должен в отдельном окне 
+# выводится календарь на заданный месяц (либо в горизонтальном, либо в 
+# вертикальном расположении). 
+
+from tkinter import *
+from datetime import *
+months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь']
+
+
+def month_window():
+    month = Toplevel(bg='gray')
+    month.geometry('270x200+1000+500')
+    month.focus_set()
+    Button(month, text='Назад', command=month.destroy, bg='red').grid(row=0, column=7)
+    Label(month, text='Пн', font=('Times', 16, 'bold')).grid(row=0, column=0)
+    Label(month, text='Вт', font=('Times', 16, 'bold')).grid(row=0, column=1)
+    Label(month, text='Ср', font=('Times', 16, 'bold')).grid(row=0, column=2)
+    Label(month, text='Чт', font=('Times', 16, 'bold')).grid(row=0, column=3)
+    Label(month, text='Пт', font=('Times', 16, 'bold')).grid(row=0, column=4)
+    Label(month, text='Сб', font=('Times', 16, 'bold'), fg='red').grid(row=0, column=5)
+    Label(month, text='Вс', font=('Times', 16, 'bold'), fg='red').grid(row=0, column=6)
+    r = 1
+    days = 0
+    index = months.index(monthlist.get(ANCHOR))
+    if index == 0 or index == 2 or index == 4 or index == 6 or index == 7 or index == 9 or index == 11:
+        days = 31
+    elif index == 3 or index == 5 or index == 8 or index == 10:
+        days = 30
+    else:
+        if int(year.get()) % 4 == 0:
+            days = 29
+        else:
+            days = 28
+    for i in range(1, days+1):
+        d = date(int(year.get()), index+1, i)
+        Label(month, text=f'{i}', bg='gray', font=('Times', 16)).grid(row=r, column=date.weekday(d))
+        if date.weekday(d) == 6:
+            r+=1
+
+
+root = Tk()
+root.title('Календарь')
+root.geometry('300x300+500+500')
+
+lb1 = Label(root, text='Введите год:')
+lb1.pack()
+year = Entry(root)
+year.pack()
+
+lb2 = Label(root, text='Веберете месяц:')
+lb2.pack()
+monthlist = Listbox(root, height=12)
+for i in months:
+    monthlist.insert(END, i)
+monthlist.pack()
+
+Button(root, text='Посмотреть', command=month_window).pack()
+
+root.mainloop()
